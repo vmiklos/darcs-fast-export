@@ -1,6 +1,24 @@
 = darcs backend for fast data importers
 Miklos Vajna <vmiklos-at-frugalware-dot-org>
 
+NOTE: This page is here only for historical reasons. The project got
+merged to bzt-fastimport. You can get that code using
+
+----
+bzr branch lp:bzr-fastimport
+----
+
+or use my git mirror:
+
+----
+git clone git://vmiklos.hu/bzr-fastimport
+----
+
+You can still send me git patches regarding darcs-fast-export if you
+want, or just send bzr patches directly to the bzr-fastimport
+developers.
+
+
 == Purpose and Features
 
 darcs-fast-export is a tool to dump a http://darcs.net/[darcs]
