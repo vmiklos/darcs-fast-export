@@ -1,23 +1,19 @@
 = darcs backend for fast data importers
 Miklos Vajna <vmiklos-at-frugalware-dot-org>
 
-NOTE: This page is here only for historical reasons. The project got
-merged to bzt-fastimport. You can get that code using
+== Intro
+
+This page is here only for historical reasons. The project got merged to
+bzt-fastimport. You can get that code using
 
 ----
 bzr branch lp:bzr-fastimport
 ----
 
-or use my git mirror:
-
-----
-git clone git://vmiklos.hu/bzr-fastimport
-----
-
-You can still send me git patches regarding darcs-fast-export if you
-want, or just send bzr patches directly to the bzr-fastimport
-developers.
-
+Please also note that there is an other project called
+http://hackage.haskell.org/package/darcs-fastconvert[darcs-fastconvert] which
+is written in native Haskell and in the 'long term' probably will be better and
+faster than darcs-fast-export.
 
 == Purpose and Features
 
