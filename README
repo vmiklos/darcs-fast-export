@@ -1,19 +1,12 @@
 = darcs backend for fast data importers
 Miklos Vajna <vmiklos-at-frugalware-dot-org>
 
-== Intro
-
-This page is here only for historical reasons. The project got merged to
+NOTE: This page is here only for historical reasons. The project got merged to
 bzt-fastimport. You can get that code using
 
 ----
 bzr branch lp:bzr-fastimport
 ----
-
-Please also note that there is an other project called
-http://hackage.haskell.org/package/darcs-fastconvert[darcs-fastconvert] which
-is written in native Haskell and in the 'long term' probably will be better and
-faster than darcs-fast-export.
 
 == Purpose and Features
 
@@ -102,7 +95,7 @@ For more examples (especially for bzr and hg), see the `t/` directory.
 
 Using git:
 ----
-$ git clone git://vmiklos.hu/darcs-fast-export
+$ git clone git://github.com/vmiklos/darcs-fast-export.git
 ----
 
 == Status
@@ -163,7 +156,7 @@ $ ls /usr/lib/python*/site-packages/hgext/fastimport/__init__.py
 == Additional resources
 
 You can reach the Changelog link:Changelog[here], and a gitweb interface
-http://vmiklos.hu/gitweb/?p=darcs-fast-export.git[here].
+https://github.com/vmiklos/darcs-fast-export[here].
 
 The fast-import stream format documentation is
 http://git.kernel.org/?p=git/git.git;a=blob;f=fast-import.c;hb=HEAD[here]
@@ -191,6 +184,10 @@ if you're interested.
   fast, but its own README says it produces incorrect results. When I
   tried, it did not handle the darcs2 format, binary files and incremental
   support.
+
+- http://hackage.haskell.org/package/darcs-fastconvert[darcs-fastconvert] is
+  written in native Haskell and in the 'long term' probably will be better and
+  faster than darcs-fast-export.
 
 == Thanks
 
