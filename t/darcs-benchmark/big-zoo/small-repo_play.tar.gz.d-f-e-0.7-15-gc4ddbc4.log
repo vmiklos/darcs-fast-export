@@ -1,0 +1,39 @@
+Initialized empty Git repository in /home/vmiklos/git/darcs-fast-export/t/darcs-benchmark/big-zoo/_playground/sandbox.git/
+progress [2008-12-22 20:51:37] getting list of patches
+progress [2008-12-22 20:51:37] parsing the inventory
+progress [2008-12-22 20:51:37] starting export, repo has 11 patches
+progress [2008-12-22 20:51:39] writing export marks
+progress [2008-12-22 20:51:39] finished
+git-fast-import statistics:
+---------------------------------------------------------------------
+Alloc'd objects:       5000
+Total objects:           60 (       140 duplicates                  )
+      blobs  :           38 (       140 duplicates         26 deltas)
+      trees  :           11 (         0 duplicates         10 deltas)
+      commits:           11 (         0 duplicates          0 deltas)
+      tags   :            0 (         0 duplicates          0 deltas)
+Total branches:           1 (         1 loads     )
+      marks:           1024 (        11 unique    )
+      atoms:             18
+Memory total:          2255 KiB
+       pools:          2098 KiB
+     objects:           156 KiB
+---------------------------------------------------------------------
+pack_report: getpagesize()            =       4096
+pack_report: core.packedGitWindowSize =   33554432
+pack_report: core.packedGitLimit      =  268435456
+pack_report: pack_used_ctr            =         47
+pack_report: pack_mmap_calls          =         11
+pack_report: pack_open_windows        =          1 /          1
+pack_report: pack_mapped              =      75141 /      75141
+---------------------------------------------------------------------
+
+
+real	0m1.449s
+user	0m0.335s
+sys	0m0.159s
+          Type: darcs
+        Format: hashed, darcs-2
+      Pristine: HashedPristine
+   Num Patches: 11
+ok, the result is correct

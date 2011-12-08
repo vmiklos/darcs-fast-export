@@ -1,0 +1,1065 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+    "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8" />
+<meta name="generator" content="AsciiDoc 8.6.5" />
+<title>darcs backend for fast data importers</title>
+<style type="text/css">
+/* Shared CSS for AsciiDoc xhtml11 and html5 backends */
+
+/* Default font. */
+body {
+  font-family: Georgia,serif;
+}
+
+/* Title font. */
+h1, h2, h3, h4, h5, h6,
+div.title, caption.title,
+thead, p.table.header,
+#toctitle,
+#author, #revnumber, #revdate, #revremark,
+#footer {
+  font-family: Arial,Helvetica,sans-serif;
+}
+
+body {
+  margin: 1em 5% 1em 5%;
+}
+
+a {
+  color: blue;
+  text-decoration: underline;
+}
+a:visited {
+  color: fuchsia;
+}
+
+em {
+  font-style: italic;
+  color: navy;
+}
+
+strong {
+  font-weight: bold;
+  color: #083194;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: #527bbd;
+  margin-top: 1.2em;
+  margin-bottom: 0.5em;
+  line-height: 1.3;
+}
+
+h1, h2, h3 {
+  border-bottom: 2px solid silver;
+}
+h2 {
+  padding-top: 0.5em;
+}
+h3 {
+  float: left;
+}
+h3 + * {
+  clear: left;
+}
+h5 {
+  font-size: 1.0em;
+}
+
+div.sectionbody {
+  margin-left: 0;
+}
+
+hr {
+  border: 1px solid silver;
+}
+
+p {
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+}
+
+ul, ol, li > p {
+  margin-top: 0;
+}
+ul > li     { color: #aaa; }
+ul > li > * { color: black; }
+
+pre {
+  padding: 0;
+  margin: 0;
+}
+
+#author {
+  color: #527bbd;
+  font-weight: bold;
+  font-size: 1.1em;
+}
+#email {
+}
+#revnumber, #revdate, #revremark {
+}
+
+#footer {
+  font-size: small;
+  border-top: 2px solid silver;
+  padding-top: 0.5em;
+  margin-top: 4.0em;
+}
+#footer-text {
+  float: left;
+  padding-bottom: 0.5em;
+}
+#footer-badges {
+  float: right;
+  padding-bottom: 0.5em;
+}
+
+#preamble {
+  margin-top: 1.5em;
+  margin-bottom: 1.5em;
+}
+div.imageblock, div.exampleblock, div.verseblock,
+div.quoteblock, div.literalblock, div.listingblock, div.sidebarblock,
+div.admonitionblock {
+  margin-top: 1.0em;
+  margin-bottom: 1.5em;
+}
+div.admonitionblock {
+  margin-top: 2.0em;
+  margin-bottom: 2.0em;
+  margin-right: 10%;
+  color: #606060;
+}
+
+div.content { /* Block element content. */
+  padding: 0;
+}
+
+/* Block element titles. */
+div.title, caption.title {
+  color: #527bbd;
+  font-weight: bold;
+  text-align: left;
+  margin-top: 1.0em;
+  margin-bottom: 0.5em;
+}
+div.title + * {
+  margin-top: 0;
+}
+
+td div.title:first-child {
+  margin-top: 0.0em;
+}
+div.content div.title:first-child {
+  margin-top: 0.0em;
+}
+div.content + div.title {
+  margin-top: 0.0em;
+}
+
+div.sidebarblock > div.content {
+  background: #ffffee;
+  border: 1px solid #dddddd;
+  border-left: 4px solid #f0f0f0;
+  padding: 0.5em;
+}
+
+div.listingblock > div.content {
+  border: 1px solid #dddddd;
+  border-left: 5px solid #f0f0f0;
+  background: #f8f8f8;
+  padding: 0.5em;
+}
+
+div.quoteblock, div.verseblock {
+  padding-left: 1.0em;
+  margin-left: 1.0em;
+  margin-right: 10%;
+  border-left: 5px solid #f0f0f0;
+  color: #777777;
+}
+
+div.quoteblock > div.attribution {
+  padding-top: 0.5em;
+  text-align: right;
+}
+
+div.verseblock > pre.content {
+  font-family: inherit;
+  font-size: inherit;
+}
+div.verseblock > div.attribution {
+  padding-top: 0.75em;
+  text-align: left;
+}
+/* DEPRECATED: Pre version 8.2.7 verse style literal block. */
+div.verseblock + div.attribution {
+  text-align: left;
+}
+
+div.admonitionblock .icon {
+  vertical-align: top;
+  font-size: 1.1em;
+  font-weight: bold;
+  text-decoration: underline;
+  color: #527bbd;
+  padding-right: 0.5em;
+}
+div.admonitionblock td.content {
+  padding-left: 0.5em;
+  border-left: 3px solid #dddddd;
+}
+
+div.exampleblock > div.content {
+  border-left: 3px solid #dddddd;
+  padding-left: 0.5em;
+}
+
+div.imageblock div.content { padding-left: 0; }
+span.image img { border-style: none; }
+a.image:visited { color: white; }
+
+dl {
+  margin-top: 0.8em;
+  margin-bottom: 0.8em;
+}
+dt {
+  margin-top: 0.5em;
+  margin-bottom: 0;
+  font-style: normal;
+  color: navy;
+}
+dd > *:first-child {
+  margin-top: 0.1em;
+}
+
+ul, ol {
+    list-style-position: outside;
+}
+ol.arabic {
+  list-style-type: decimal;
+}
+ol.loweralpha {
+  list-style-type: lower-alpha;
+}
+ol.upperalpha {
+  list-style-type: upper-alpha;
+}
+ol.lowerroman {
+  list-style-type: lower-roman;
+}
+ol.upperroman {
+  list-style-type: upper-roman;
+}
+
+div.compact ul, div.compact ol,
+div.compact p, div.compact p,
+div.compact div, div.compact div {
+  margin-top: 0.1em;
+  margin-bottom: 0.1em;
+}
+
+tfoot {
+  font-weight: bold;
+}
+td > div.verse {
+  white-space: pre;
+}
+
+div.hdlist {
+  margin-top: 0.8em;
+  margin-bottom: 0.8em;
+}
+div.hdlist tr {
+  padding-bottom: 15px;
+}
+dt.hdlist1.strong, td.hdlist1.strong {
+  font-weight: bold;
+}
+td.hdlist1 {
+  vertical-align: top;
+  font-style: normal;
+  padding-right: 0.8em;
+  color: navy;
+}
+td.hdlist2 {
+  vertical-align: top;
+}
+div.hdlist.compact tr {
+  margin: 0;
+  padding-bottom: 0;
+}
+
+.comment {
+  background: yellow;
+}
+
+.footnote, .footnoteref {
+  font-size: 0.8em;
+}
+
+span.footnote, span.footnoteref {
+  vertical-align: super;
+}
+
+#footnotes {
+  margin: 20px 0 20px 0;
+  padding: 7px 0 0 0;
+}
+
+#footnotes div.footnote {
+  margin: 0 0 5px 0;
+}
+
+#footnotes hr {
+  border: none;
+  border-top: 1px solid silver;
+  height: 1px;
+  text-align: left;
+  margin-left: 0;
+  width: 20%;
+  min-width: 100px;
+}
+
+div.colist td {
+  padding-right: 0.5em;
+  padding-bottom: 0.3em;
+  vertical-align: top;
+}
+div.colist td img {
+  margin-top: 0.3em;
+}
+
+@media print {
+  #footer-badges { display: none; }
+}
+
+#toc {
+  margin-bottom: 2.5em;
+}
+
+#toctitle {
+  color: #527bbd;
+  font-size: 1.1em;
+  font-weight: bold;
+  margin-top: 1.0em;
+  margin-bottom: 0.1em;
+}
+
+div.toclevel1, div.toclevel2, div.toclevel3, div.toclevel4 {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+div.toclevel2 {
+  margin-left: 2em;
+  font-size: 0.9em;
+}
+div.toclevel3 {
+  margin-left: 4em;
+  font-size: 0.9em;
+}
+div.toclevel4 {
+  margin-left: 6em;
+  font-size: 0.9em;
+}
+
+span.aqua { color: aqua; }
+span.black { color: black; }
+span.blue { color: blue; }
+span.fuchsia { color: fuchsia; }
+span.gray { color: gray; }
+span.green { color: green; }
+span.lime { color: lime; }
+span.maroon { color: maroon; }
+span.navy { color: navy; }
+span.olive { color: olive; }
+span.purple { color: purple; }
+span.red { color: red; }
+span.silver { color: silver; }
+span.teal { color: teal; }
+span.white { color: white; }
+span.yellow { color: yellow; }
+
+span.aqua-background { background: aqua; }
+span.black-background { background: black; }
+span.blue-background { background: blue; }
+span.fuchsia-background { background: fuchsia; }
+span.gray-background { background: gray; }
+span.green-background { background: green; }
+span.lime-background { background: lime; }
+span.maroon-background { background: maroon; }
+span.navy-background { background: navy; }
+span.olive-background { background: olive; }
+span.purple-background { background: purple; }
+span.red-background { background: red; }
+span.silver-background { background: silver; }
+span.teal-background { background: teal; }
+span.white-background { background: white; }
+span.yellow-background { background: yellow; }
+
+span.big { font-size: 2em; }
+span.small { font-size: 0.6em; }
+
+span.underline { text-decoration: underline; }
+span.overline { text-decoration: overline; }
+span.line-through { text-decoration: line-through; }
+
+
+/*
+ * xhtml11 specific
+ *
+ * */
+
+tt {
+  font-family: monospace;
+  font-size: inherit;
+  color: navy;
+}
+
+div.tableblock {
+  margin-top: 1.0em;
+  margin-bottom: 1.5em;
+}
+div.tableblock > table {
+  border: 3px solid #527bbd;
+}
+thead, p.table.header {
+  font-weight: bold;
+  color: #527bbd;
+}
+p.table {
+  margin-top: 0;
+}
+/* Because the table frame attribute is overriden by CSS in most browsers. */
+div.tableblock > table[frame="void"] {
+  border-style: none;
+}
+div.tableblock > table[frame="hsides"] {
+  border-left-style: none;
+  border-right-style: none;
+}
+div.tableblock > table[frame="vsides"] {
+  border-top-style: none;
+  border-bottom-style: none;
+}
+
+
+/*
+ * html5 specific
+ *
+ * */
+
+.monospaced {
+  font-family: monospace;
+  font-size: inherit;
+  color: navy;
+}
+
+table.tableblock {
+  margin-top: 1.0em;
+  margin-bottom: 1.5em;
+}
+thead, p.tableblock.header {
+  font-weight: bold;
+  color: #527bbd;
+}
+p.tableblock {
+  margin-top: 0;
+}
+table.tableblock {
+  border-width: 3px;
+  border-spacing: 0px;
+  border-style: solid;
+  border-color: #527bbd;
+  border-collapse: collapse;
+}
+th.tableblock, td.tableblock {
+  border-width: 1px;
+  padding: 4px;
+  border-style: solid;
+  border-color: #527bbd;
+}
+
+table.tableblock.frame-topbot {
+  border-left-style: hidden;
+  border-right-style: hidden;
+}
+table.tableblock.frame-sides {
+  border-top-style: hidden;
+  border-bottom-style: hidden;
+}
+table.tableblock.frame-none {
+  border-style: hidden;
+}
+
+th.tableblock.halign-left, td.tableblock.halign-left {
+  text-align: left;
+}
+th.tableblock.halign-center, td.tableblock.halign-center {
+  text-align: center;
+}
+th.tableblock.halign-right, td.tableblock.halign-right {
+  text-align: right;
+}
+
+th.tableblock.valign-top, td.tableblock.valign-top {
+  vertical-align: top;
+}
+th.tableblock.valign-middle, td.tableblock.valign-middle {
+  vertical-align: middle;
+}
+th.tableblock.valign-bottom, td.tableblock.valign-bottom {
+  vertical-align: bottom;
+}
+</style>
+<script type="text/javascript">
+/*<![CDATA[*/
+var asciidoc = {  // Namespace.
+
+/////////////////////////////////////////////////////////////////////
+// Table Of Contents generator
+/////////////////////////////////////////////////////////////////////
+
+/* Author: Mihai Bazon, September 2002
+ * http://students.infoiasi.ro/~mishoo
+ *
+ * Table Of Content generator
+ * Version: 0.4
+ *
+ * Feel free to use this script under the terms of the GNU General Public
+ * License, as long as you do not remove or alter this notice.
+ */
+
+ /* modified by Troy D. Hanson, September 2006. License: GPL */
+ /* modified by Stuart Rackham, 2006, 2009. License: GPL */
+
+// toclevels = 1..4.
+toc: function (toclevels) {
+
+  function getText(el) {
+    var text = "";
+    for (var i = el.firstChild; i != null; i = i.nextSibling) {
+      if (i.nodeType == 3 /* Node.TEXT_NODE */) // IE doesn't speak constants.
+        text += i.data;
+      else if (i.firstChild != null)
+        text += getText(i);
+    }
+    return text;
+  }
+
+  function TocEntry(el, text, toclevel) {
+    this.element = el;
+    this.text = text;
+    this.toclevel = toclevel;
+  }
+
+  function tocEntries(el, toclevels) {
+    var result = new Array;
+    var re = new RegExp('[hH]([2-'+(toclevels+1)+'])');
+    // Function that scans the DOM tree for header elements (the DOM2
+    // nodeIterator API would be a better technique but not supported by all
+    // browsers).
+    var iterate = function (el) {
+      for (var i = el.firstChild; i != null; i = i.nextSibling) {
+        if (i.nodeType == 1 /* Node.ELEMENT_NODE */) {
+          var mo = re.exec(i.tagName);
+          if (mo && (i.getAttribute("class") || i.getAttribute("className")) != "float") {
+            result[result.length] = new TocEntry(i, getText(i), mo[1]-1);
+          }
+          iterate(i);
+        }
+      }
+    }
+    iterate(el);
+    return result;
+  }
+
+  var toc = document.getElementById("toc");
+  if (!toc) {
+    return;
+  }
+
+  // Delete existing TOC entries in case we're reloading the TOC.
+  var tocEntriesToRemove = [];
+  var i;
+  for (i = 0; i < toc.childNodes.length; i++) {
+    var entry = toc.childNodes[i];
+    if (entry.nodeName == 'DIV'
+     && entry.getAttribute("class")
+     && entry.getAttribute("class").match(/^toclevel/))
+      tocEntriesToRemove.push(entry);
+  }
+  for (i = 0; i < tocEntriesToRemove.length; i++) {
+    toc.removeChild(tocEntriesToRemove[i]);
+  }
+
+  // Rebuild TOC entries.
+  var entries = tocEntries(document.getElementById("content"), toclevels);
+  for (var i = 0; i < entries.length; ++i) {
+    var entry = entries[i];
+    if (entry.element.id == "")
+      entry.element.id = "_toc_" + i;
+    var a = document.createElement("a");
+    a.href = "#" + entry.element.id;
+    a.appendChild(document.createTextNode(entry.text));
+    var div = document.createElement("div");
+    div.appendChild(a);
+    div.className = "toclevel" + entry.toclevel;
+    toc.appendChild(div);
+  }
+  if (entries.length == 0)
+    toc.parentNode.removeChild(toc);
+},
+
+
+/////////////////////////////////////////////////////////////////////
+// Footnotes generator
+/////////////////////////////////////////////////////////////////////
+
+/* Based on footnote generation code from:
+ * http://www.brandspankingnew.net/archive/2005/07/format_footnote.html
+ */
+
+footnotes: function () {
+  // Delete existing footnote entries in case we're reloading the footnodes.
+  var i;
+  var noteholder = document.getElementById("footnotes");
+  if (!noteholder) {
+    return;
+  }
+  var entriesToRemove = [];
+  for (i = 0; i < noteholder.childNodes.length; i++) {
+    var entry = noteholder.childNodes[i];
+    if (entry.nodeName == 'DIV' && entry.getAttribute("class") == "footnote")
+      entriesToRemove.push(entry);
+  }
+  for (i = 0; i < entriesToRemove.length; i++) {
+    noteholder.removeChild(entriesToRemove[i]);
+  }
+
+  // Rebuild footnote entries.
+  var cont = document.getElementById("content");
+  var spans = cont.getElementsByTagName("span");
+  var refs = {};
+  var n = 0;
+  for (i=0; i<spans.length; i++) {
+    if (spans[i].className == "footnote") {
+      n++;
+      var note = spans[i].getAttribute("data-note");
+      if (!note) {
+        // Use [\s\S] in place of . so multi-line matches work.
+        // Because JavaScript has no s (dotall) regex flag.
+        note = spans[i].innerHTML.match(/\s*\[([\s\S]*)]\s*/)[1];
+        spans[i].innerHTML =
+          "[<a id='_footnoteref_" + n + "' href='#_footnote_" + n +
+          "' title='View footnote' class='footnote'>" + n + "</a>]";
+        spans[i].setAttribute("data-note", note);
+      }
+      noteholder.innerHTML +=
+        "<div class='footnote' id='_footnote_" + n + "'>" +
+        "<a href='#_footnoteref_" + n + "' title='Return to text'>" +
+        n + "</a>. " + note + "</div>";
+      var id =spans[i].getAttribute("id");
+      if (id != null) refs["#"+id] = n;
+    }
+  }
+  if (n == 0)
+    noteholder.parentNode.removeChild(noteholder);
+  else {
+    // Process footnoterefs.
+    for (i=0; i<spans.length; i++) {
+      if (spans[i].className == "footnoteref") {
+        var href = spans[i].getElementsByTagName("a")[0].getAttribute("href");
+        href = href.match(/#.*/)[0];  // Because IE return full URL.
+        n = refs[href];
+        spans[i].innerHTML =
+          "[<a href='#_footnote_" + n +
+          "' title='View footnote' class='footnote'>" + n + "</a>]";
+      }
+    }
+  }
+},
+
+install: function(toclevels) {
+  var timerId;
+
+  function reinstall() {
+    asciidoc.footnotes();
+    if (toclevels) {
+      asciidoc.toc(toclevels);
+    }
+  }
+
+  function reinstallAndRemoveTimer() {
+    clearInterval(timerId);
+    reinstall();
+  }
+
+  timerId = setInterval(reinstall, 500);
+  if (document.addEventListener)
+    document.addEventListener("DOMContentLoaded", reinstallAndRemoveTimer, false);
+  else
+    window.onload = reinstallAndRemoveTimer;
+}
+
+}
+asciidoc.install(2);
+/*]]>*/
+</script>
+</head>
+<body class="article">
+<div id="header">
+<h1>darcs backend for fast data importers</h1>
+<span id="author">Miklos Vajna</span><br />
+<span id="email"><tt>&lt;<a href="mailto:vmiklos-at-frugalware-dot-org">vmiklos-at-frugalware-dot-org</a>&gt;</tt></span><br />
+<div id="toc">
+  <div id="toctitle">Table of Contents</div>
+  <noscript><p><b>JavaScript must be enabled in your browser to display the table of contents.</b></p></noscript>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="admonitionblock">
+<table><tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">This page is here only for historical reasons. The project got merged to
+bzt-fastimport. You can get that code using</td>
+</tr></table>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre><tt>bzr branch lp:bzr-fastimport</tt></pre>
+</div></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_purpose_and_features">1. Purpose and Features</h2>
+<div class="sectionbody">
+<div class="paragraph"><p>darcs-fast-export is a tool to dump a <a href="http://darcs.net/">darcs</a>
+repository in a format understood by "fast-importers" such as
+<a href="http://git.or.cz/">git</a>
+<a href="http://www.kernel.org/pub/software/scm/git/docs/git-fast-import.html">fast-import</a>.
+It exhibits the following <em>features:</em></p></div>
+<div class="dlist"><dl>
+<dt class="hdlist1">
+Fast
+</dt>
+<dd>
+<p>
+        darcs-fast-export provides a fast darcs backend for fast-import.
+        See <a href="t/bench-results/bench-results.png">here</a> for exact details.
+</p>
+</dd>
+<dt class="hdlist1">
+Correct
+</dt>
+<dd>
+<p>
+        darcs-fast-export produces correct results in any extreme cases.
+        It has been tested with a collection of large darcs repos (called
+        <a href="http://code.haskell.org/darcs/big-zoo/">big-zoo</a>). And several testcases
+        under the <tt>t/</tt> directory.
+</p>
+</dd>
+<dt class="hdlist1">
+Independent
+</dt>
+<dd>
+<p>
+        Ideally it should work with any fast importer, but actually it has been
+        tested with git fast-import, bzr fast-import and hg fastimport. (These
+        are the three fast-import implementations available ATM.)
+       <br />
+        hg fastimport needs three patches. While they are not in the upstream,
+        you can get it from my repository using
+</p>
+<div class="listingblock">
+<div class="content">
+<pre><tt>$ hg clone static-http://frugalware.org/~vmiklos/hg/hg-fastimport</tt></pre>
+</div></div>
+</dd>
+<dt class="hdlist1">
+Formats
+</dt>
+<dd>
+<p>
+        It supports the <em>darcs-2</em>, <em>hashed</em>, and <em>old-fashioned-inventory</em> darcs
+        repository formats.
+</p>
+</dd>
+<dt class="hdlist1">
+Incremental conversions
+</dt>
+<dd>
+<p>
+        It supports the usual <tt>--export-marks</tt> / <tt>--import-marks</tt> switches to
+        allow incremental conversion.
+</p>
+</dd>
+<dt class="hdlist1">
+Wrapper scripts
+</dt>
+<dd>
+<p>
+        A wrapper script called <tt>d2x</tt> is available if you find typing
+        <tt>--export-marks</tt> / <tt>--import-marks</tt> all the time boring. A similar one
+        is also provided for the other direction, called <tt>x2d</tt>.  Finally, if you
+        want to work on darcs repos with git, you can use the <tt>git-darcs</tt>
+        wrapper.
+</p>
+</dd>
+<dt class="hdlist1">
+Author mappings
+</dt>
+<dd>
+<p>
+        Supports <tt>--authors-file</tt> option like Git&#8217;s SVN adaptor, for DARCS
+        repositories that originated in CVS or SVN.
+</p>
+</dd>
+<dt class="hdlist1">
+Import script
+</dt>
+<dd>
+<p>
+        The pair of <tt>darcs-fast-export</tt>, <tt>darcs-fast-import</tt> is also
+        included in this repo. It has been tested with the fast-expoters of Git,
+        Hg, Bzr and - of course - Darcs itself.
+</p>
+</dd>
+<dt class="hdlist1">
+Two-way sync
+</dt>
+<dd>
+<p>
+        Using <tt>darcs-fast-export</tt> / <tt>darcs-fast-import</tt>, it is possible to
+        convert a darcs repo to an other VCS, work there, then convert your work
+        back to Darcs (or vica versa). This has been tested with "darcs &#8594; git;
+        hack hack; git &#8594; darcs".
+</p>
+</dd>
+</dl></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_usage">2. Usage</h2>
+<div class="sectionbody">
+<div class="paragraph"><p>See the manpages:</p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+<a href="darcs-fast-export.html">darcs-fast-export</a>
+</p>
+</li>
+<li>
+<p>
+<a href="darcs-fast-import.html">darcs-fast-import</a>
+</p>
+</li>
+<li>
+<p>
+<a href="d2x.html">d2x</a>
+</p>
+</li>
+<li>
+<p>
+<a href="x2d.html">x2d</a>
+</p>
+</li>
+<li>
+<p>
+<a href="git-darcs.html">git-darcs</a>
+</p>
+</li>
+</ul></div>
+<div class="sect2">
+<h3 id="_example">2.1. Example</h3>
+<div class="paragraph"><p>Assuming that <tt>test/</tt> is a darcs repo, you could do this:</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><tt>$ mkdir test.git
+$ cd test.git
+$ git --bare init
+$ cd ..
+$ darcs-fast-export test |(cd test.git; git fast-import)</tt></pre>
+</div></div>
+<div class="paragraph"><p>For more examples (especially for bzr and hg), see the <tt>t/</tt> directory.</p></div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_download">3. Download</h2>
+<div class="sectionbody">
+<div class="paragraph"><p>Using git:</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><tt>$ git clone git://github.com/vmiklos/darcs-fast-export.git</tt></pre>
+</div></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_status">4. Status</h2>
+<div class="sectionbody">
+<div class="paragraph"><p>In general, darcs-fast-export should work fine. darcs-fast-import has
+known problems with tags - other than that it should be okay. git-darcs
+should work properly as long as you are not paying too much attention to
+the imported tags (newly created tags won&#8217;t be pushed back).</p></div>
+<div class="paragraph"><p>darcs-fast-export has been tested with the following versions:</p></div>
+<div class="paragraph"><p>Darcs version (see <a href="http://bugs.darcs.net/issue844">this bug</a> on why do
+you need such a new version):</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><tt>$ darcs --version
+2.2.0 (release)</tt></pre>
+</div></div>
+<div class="paragraph"><p>Git version:</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><tt>$ git --version
+git version 1.6.0.2</tt></pre>
+</div></div>
+<div class="paragraph"><p>Bzr versions:</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><tt>$ bzr version
+Bazaar (bzr) 1.12
+$ (cd ~/bzr/fastimport; bzr log --limit 1|grep revno)
+revno: 181</tt></pre>
+</div></div>
+<div class="paragraph"><p>Yes, you need the fastiport plugin from BZR, the last hg release series
+supported by fastimport-0.6 is hg-1.0.x.</p></div>
+<div class="paragraph"><p>Mercurial (Hg) version:</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><tt>$ hg version
+Mercurial Distributed SCM (version 1.2.1)</tt></pre>
+</div></div>
+<div class="paragraph"><p>Strictly speaking this document is a wrong place to talk about enabling
+hg plugins. However&#8230;</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><tt>$ cat ~/.hgrc
+[extensions]
+hgext.fastimport=</tt></pre>
+</div></div>
+<div class="paragraph"><p>and once you installed the plugin correctly, you should have something like:</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><tt>$ ls /usr/lib/python*/site-packages/hgext/fastimport/__init__.py
+/usr/lib/python2.5/site-packages/hgext/fastimport/__init__.py</tt></pre>
+</div></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_additional_resources">5. Additional resources</h2>
+<div class="sectionbody">
+<div class="paragraph"><p>You can reach the Changelog <a href="Changelog">here</a>, and a gitweb interface
+<a href="https://github.com/vmiklos/darcs-fast-export">here</a>.</p></div>
+<div class="paragraph"><p>The fast-import stream format documentation is
+<a href="http://git.kernel.org/?p=git/git.git;a=blob;f=fast-import.c;hb=HEAD">here</a>
+if you&#8217;re interested.</p></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_alternatives">6. Alternatives</h2>
+<div class="sectionbody">
+<div class="ulist"><ul>
+<li>
+<p>
+<a href="http://repo.or.cz/w/darcs2git.git">darcs2git</a> tries to find conflict
+  resolutions (to map them to merge commits), but it&#8217;s rather slow
+  because of this. It does not support the darcs2 format and/or
+  incremental conversions, either. darcs-fast-export may support mapping
+  to merge commits later, but not before
+  <a href="http://bugs.darcs.net/issue1261">this issue</a> is addressed.
+</p>
+</li>
+<li>
+<p>
+<a href="http://progetti.arstecnica.it/tailor">tailor</a> is an any2any VCS
+  converter, but it produces corrupted results when converting the
+  big-zoo - see <a href="http://progetti.arstecnica.it/tailor/ticket/171">this
+  ticket</a>.
+</p>
+</li>
+<li>
+<p>
+<a href="http://git.sanityinc.com/?p=darcs-to-git.git">darcs-to-git</a> is similar
+  to darcs2git, but it fails for the testcases found in the testsuite of
+  darcs-fast-export.
+</p>
+</li>
+<li>
+<p>
+<a href="http://github.com/freshtonic/undarcs/tree/master">undarcs</a> claims to be
+  fast, but its own README says it produces incorrect results. When I
+  tried, it did not handle the darcs2 format, binary files and incremental
+  support.
+</p>
+</li>
+<li>
+<p>
+<a href="http://hackage.haskell.org/package/darcs-fastconvert">darcs-fastconvert</a> is
+  written in native Haskell and in the <em>long term</em> probably will be better and
+  faster than darcs-fast-export.
+</p>
+</li>
+</ul></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_thanks">7. Thanks</h2>
+<div class="sectionbody">
+<div class="ulist"><ul>
+<li>
+<p>
+Jason Dagit for helping me with darcs2 issues
+</p>
+</li>
+<li>
+<p>
+Shawn O. Pearce and Johannes Schindelin for writing <tt>git-fast-import</tt>
+  / <tt>git-fast-export</tt>
+</p>
+</li>
+<li>
+<p>
+Ian Clatworthy for writing bzr fast-import
+</p>
+</li>
+<li>
+<p>
+Paul Crowley for writing hg fast-import
+</p>
+</li>
+<li>
+<p>
+Matthias Andree for assorted improvements, among them the --help,
+  --encoding and --authors-file features (using Python&#8217;s optparse), support
+  for hashed repositories, <tt>_darcs/format</tt> interpretation, and mangling
+  whitespace in tags to cope with repos imported into DARCS from CVS.
+</p>
+</li>
+<li>
+<p>
+Pieter de Bie for writing git-bzr, which was the base of git-darcs
+</p>
+</li>
+</ul></div>
+</div>
+</div>
+</div>
+<div id="footnotes"><hr /></div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2011-12-08 18:11:31 CET
+</div>
+</div>
+</body>
+</html>

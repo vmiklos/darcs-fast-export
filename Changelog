@@ -1,0 +1,1770 @@
+commit cc500a954748c7fac11da7df369da6f1a9d3c219
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Fri Aug 7 08:26:32 2009 +0200
+
+    Project merged to bzr-fastimport, update README accordingly.
+
+commit 0a5c699766cd2a5b527b7e7a10113edd838fddb8
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Sat Jul 25 12:19:13 2009 +0200
+
+    get rid of HACKING, as we won't merge the side branches to bzr-fastimport
+
+commit 561cd067a283f0f42e70d723f56101129e4e488d
+Author: D Herring <dherring@at.tentpost.dot.com>
+Date:   Sat Mar 28 23:35:38 2009 -0400
+
+    git-darcs: minor bugfix
+    
+    Fix error handling when adding a darcs remote with the same name two
+    times.
+
+commit 13833907f72878d48b7d4433aae6bb744ddb51aa
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Mon Jun 29 00:38:00 2009 +0200
+
+    gd: make find-git output similar to the find-darcs one
+
+commit c7fe2928cbcfe1a56c6be4c837e619737506d37d
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Mon Jun 29 00:31:05 2009 +0200
+
+    improve typical workflow example
+
+commit 7c3456c9578ee5e1e424f82cab25cfa00efd0c3f
+Author: Brian Warner <warner@lothar.com>
+Date:   Thu Jun 25 19:10:04 2009 -0700
+
+    darcs-fast-export: allow hyphens in tag names, I think they're ok
+
+commit c3d888a31fcdf54b4af394c37808a9ae1a3178be
+Author: Brian Warner <warner@lothar.com>
+Date:   Thu Jun 25 19:05:21 2009 -0700
+
+    darcs-fast-import: fix timezone processing
+    
+    I observed git-to-darcs resulting in a darcs patch with a timestamp that was
+    7 hours later than it should have been (I live in PDT, -0700). I think
+    get_date() was wrong: it generated a UTC-based string for darcs, but then
+    appended the committer's original timezone. Darcs thought this meant it
+    should treat the (UTC) string as localtime-in-that-timezone, and applied an
+    offset it shouldn't have.
+    
+    If we only cared about preserving the committer time, then it would be
+    appropriate to pass a UTC string with no timezone into darcs. But we're
+    trying to record two things: the absolute commit time, and the localtime in
+    the committers timezone (i.e. the absolute commit time and the timezone in
+    which it occurred).
+    
+    My new version of get_date() tries to accomplish this by parsing the
+    timezone-offset we get from git (well, from the git-fast-export -format
+    stream), turn it into a number of seconds, then add that number to the
+    absolute timestamp we got from the stream. Then it uses time.gmtime() to
+    render that (effectively getting a localtime string from the committer's
+    timezone), and then appends the same timezone string as before. Darcs will
+    then effectively undo this combination, to derive the absolute
+    seconds-since-epoch and also record the localtime string.
+    
+    With this patch, my darcs timestamps appear the same as my git ones.
+
+commit a6387befc583c9f9419cf301d661d9c6e0065b09
+Author: Brian Warner <warner@lothar.com>
+Date:   Thu Jun 25 17:39:15 2009 -0700
+
+    git-darcs: change #!/bin/sh to /bin/bash, '$? == 0' is a bash-ism
+    (apparently), and /bin/sh is dash on some platforms (e.g. Ubuntu Hardy)
+
+commit 24c4054abf1fef906761e8fc92714429f596af49
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Fri Jun 26 00:21:28 2009 +0200
+
+    update bzr and hg versions
+
+commit a82914def632401a0268023abee3e555c5d5fcd8
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Thu Jun 25 23:48:59 2009 +0200
+
+    TAG 0.9
+
+commit 35c1cb2df85214395bc94ba5c4aa5c74e1b99ee5
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Thu Jun 25 23:47:09 2009 +0200
+
+    updates for 0.9
+
+commit b0269706c9a720289f97343a7054ed6fca78b678
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Thu Jun 25 23:41:38 2009 +0200
+
+    port d667ba5 to darcs-fast-import
+    
+    no idea why did i forgot about it ;)
+
+commit 9840f6595255c7b55bc5cf13a5bab5ed420a4612
+Merge: 6fd6fa2 aea97c6
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Thu Jun 25 23:31:31 2009 +0200
+
+    Merge branch 'add-dfe-opts' of git://github.com/warner/darcs-fast-export
+    
+    * 'add-dfe-opts' of git://github.com/warner/darcs-fast-export:
+      git-darcs: remember and pass options to darcs-fast-export
+
+commit 6fd6fa277466a88f630a8dea891e618c08470e48
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Thu Jun 25 23:25:59 2009 +0200
+
+    bzr-fast-export -> bzr-fast-export.py
+    
+    I just ran 'make' on the testsuite today and this is probably needed due
+    to a recent bzr / bzr-fastimport upgrade.
+
+commit aea97c643a3e6a6ca25e688f91943fbdb5c24a46
+Author: Brian Warner <warner@lothar.com>
+Date:   Thu Jun 25 13:01:54 2009 -0700
+
+    git-darcs: remember and pass options to darcs-fast-export
+
+commit 90e0151847183601d65ae13bc9491ffb3b9c130b
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Tue Mar 17 15:19:00 2009 +0100
+
+    t: exclude more hg files
+
+commit c9b46aa4034879f74e6c5f263d3c3eff20b1f4de
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Mon Jan 26 00:31:28 2009 +0100
+
+    README: at least we can now require a stable darcs
+
+commit d3c1fc68bbde5ca57fc6bb3a4a2061d38cace9be
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Sun Jan 25 03:30:29 2009 +0100
+
+    update NEWS
+
+commit 66fd4e73c87a85516bb4651c5e90209e2320f706
+Author: D Herring <dherring@at.tentpost.dot.com>
+Date:   Sat Jan 24 20:13:22 2009 -0500
+
+    added a few git-darcs commands
+
+commit 695d0272b31036cc99efdc9411d18d9b7b6d969c
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Sat Jan 24 20:09:46 2009 +0100
+
+    add test for having accents in tag names
+
+commit 216939b90bcb9c8c681b9d6e99f45b141a7be52a
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Sat Jan 24 16:00:04 2009 +0100
+
+    fast-export: escape anything which is [^a-zA-Z0-9.] with an undescore
+    
+    Reported-by: Daniel Herring <dherring@tentpost.com>
+
+commit d667ba5bf94b19efbc421f20ec4cef648fdf97f5
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Tue Dec 30 03:31:47 2008 +0100
+
+    fix python2.6 warning by replace the popen2 module with the subprocess one
+
+commit 20d9b64edc152bb00a66c1d85e68e02e88f404cd
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Fri Dec 26 02:39:09 2008 +0100
+
+    add new darcs bug id
+    
+    once that's implemented, we may be able to map to merge commits.
+
+commit aed3b4f835d4bf5ffb11b830758643f370dcc508
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Fri Dec 26 02:27:41 2008 +0100
+
+    update undarcs' entry
+    
+    ok, till now i just read the README, but now i really tried it. I did
+    not get any problem with handling conflicts (while the README suggested
+    it won't), but binary file handling, darcs2 and incremental support
+    seems missing.
+
+commit 1c8f5f7c04607e932bffb4d516cde1a151082ba2
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Fri Dec 26 02:09:24 2008 +0100
+
+    evaluate darcs-to-git
+    
+    ugh, that was quick. i expected it to pass most of my testcases, but it
+    fails before the interesting stuff. :)
+    
+    long: i wanted to see how does it deal with the darcs chan --xml -s
+    output (where tailor fails), but it fails with trivial history as well
+    if the repo contains funny author names.
+
+commit fcc7dc55dedf629e2691dd64c687c1a9790caa4a
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Fri Dec 26 01:57:45 2008 +0100
+
+    new todo items
+
+commit c65fdc67340f8d73117629ef3a6c60c2d9cbba56
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Fri Dec 26 01:45:36 2008 +0100
+
+    TAG 0.8
+
+commit 11382cad59b55e94f24ec6a4602fe230b91205cf
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Fri Dec 26 01:44:47 2008 +0100
+
+    update VERSION to 0.8
+
+commit f9e81b9b4c7f1a1a04c6ca6bc164acd589b0587c
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Fri Dec 26 01:42:58 2008 +0100
+
+    add big-zoo reference
+
+commit d0e8c0ff0cbba4b703199065ffce1a8700a885a1
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Fri Dec 26 01:38:27 2008 +0100
+
+    add link to the benchmark details
+
+commit aa35ea3ce4b9a5d218ada11d922e82b3a3400d04
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Fri Dec 26 01:00:43 2008 +0100
+
+    update NEWS
+    
+    "sometimes" means the case i described at http://bugs.darcs.net/issue1281
+
+commit e251021c08c2fb174ee14cae88ad2886dd0b9169
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Fri Dec 26 01:35:57 2008 +0100
+
+    add bench graph code
+
+commit c6b9a9a4a85b27822359fa9cc0da95113d25abbd
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Fri Dec 26 00:46:00 2008 +0100
+
+    t/bench: log the number of patches as well
+
+commit c8e2e0bf858bfcc14468218678a87c9abd444634
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Tue Dec 23 00:48:45 2008 +0100
+
+    asciidoc: fix refentryinfo position
+
+commit 5e0bde08d69578760d7bef8ced2fa3d588d11399
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Mon Dec 22 20:56:57 2008 +0100
+
+    whoops, that would have to be part of the revert (Lele is still in the xml branch)
+
+commit c4ddbc4b3c27a5463df611a85f9d7ae39bf8de8c
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Mon Dec 22 20:41:38 2008 +0100
+
+    update HACKING
+
+commit 39bd6d40016c5654701986f89509b6f07ec75fb1
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Mon Dec 22 20:36:01 2008 +0100
+
+    Revert "don't do the re-add dance in every commit for unchanged files"
+    
+    This reverts commit d12d76004245ac69c61991f3cc90d9ad306598b5.
+    
+    It was a bad idea, because we had to parse the darcs changes --xml -s
+    output which is broken:
+    
+    - sometimes rename A B, remove B should result in remove A
+    - sometimes rename A B, remove B should result is B with the contents
+      from A
+
+commit cacbcb18238cc40277f72bec8376fe600ec4e9a1
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Mon Dec 22 20:29:42 2008 +0100
+
+    add new tests to demonstrate a breakage
+
+commit 64afd84d02b622ec8fe18b2ee398c366fad9d8f8
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Fri Dec 19 00:23:04 2008 +0100
+
+    hack for the inverted patch + file modify combo
+
+commit b400323cd881954606ad1f7a6e6bf2d458c288a7
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Thu Dec 18 23:58:50 2008 +0100
+
+    d-f-e: fix inverted patch prefix
+
+commit 5e017fd2c155c8eff5154d2f83054d86eda14efb
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Wed Dec 17 22:08:28 2008 +0100
+
+    d-f-e: do not duplicate lists with no good reason
+
+commit 6c28bb3c6e3baf129a893e982100d6c281420525
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Wed Dec 17 18:44:46 2008 +0100
+
+    d-f-e: simplify 'adddir A, rename A B' to -> noop
+    
+    because addir A is a noop and add A, rename A B would be add B
+
+commit bfd4b182d16d2f9da5a6db842526dc910eb4ce68
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Wed Dec 17 02:22:03 2008 +0100
+
+    fix renaming multiple empty dirs
+
+commit d20902732f77ec7eaee83ff5f708446d095155b7
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Wed Dec 17 01:39:11 2008 +0100
+
+    don't try to list non-dirs
+
+commit 41d0702131cdef76176be1a36f485192c81ab984
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Wed Dec 17 01:19:47 2008 +0100
+
+    fix renaming of empty dirs
+
+commit 368d196f109c16edfdf66d8508bf34a4716c5d72
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Sat Nov 29 22:35:08 2008 +0100
+
+    update numbers and add Lele
+
+commit d86bcf59644011dce52e01358b9df7bf286e7b1e
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Sat Nov 29 22:28:43 2008 +0100
+
+    docu update
+
+commit 1934343f9606e1fc259d3248845d2b03db4ee29a
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Sat Nov 29 14:34:30 2008 +0100
+
+    bench-tailor: fix char err ignore opt
+
+commit 8407bb0c79bdb319b0f2c4dfa841d78cb94c0030
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Sat Nov 29 02:36:49 2008 +0100
+
+    bench-tailor: ignore charset problems
+    
+    i don't want to care about this, i'm interested in time results only
+
+commit b5b59181433aac5866c93810156bd338f55465fd
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Fri Nov 28 19:29:56 2008 +0100
+
+    bench-tailor: clean up config
+
+commit 9468e899c1f2a9ca42f6f2e148c2ff5f4139e5b0
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Fri Nov 28 16:31:14 2008 +0100
+
+    TAG 0.7
+
+commit ca295af6bbf145d030756206097bf5d6781188ac
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Fri Nov 28 16:31:02 2008 +0100
+
+    updates for 0.7
+
+commit 00d938401b8995a873e89181f78546c4d92c891c
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Fri Nov 28 15:45:44 2008 +0100
+
+    d-f-e: avoid firstChild and toxml()
+
+commit 197b0da17f57ac431d11833f316e848ae1f02f44
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Fri Nov 28 15:43:30 2008 +0100
+
+    d-f-e: add --progress option
+
+commit a848dbbae1e8637862b1d688c46072de23415ad4
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Fri Nov 28 15:28:32 2008 +0100
+
+    add bench script for tailor
+
+commit b8a286f40ed54e7a895c5f74ea9834ce62bb4e5d
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Fri Nov 28 14:02:34 2008 +0100
+
+    bench: allow benchmarking a single repo
+
+commit 8fd1089787d5d60ff4752db40879a9cf5f6dfae2
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Fri Nov 28 13:25:20 2008 +0100
+
+    bench: specify git version in log filename
+
+commit 261c4bd9fbd07c5272b385065022a033f8470fd0
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Fri Nov 28 13:24:35 2008 +0100
+
+    d-f-e: simplify add A, remove A in the same commit
+
+commit b2abee1f40d00fcf8c129b723f426062bdef72a4
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Thu Nov 27 15:40:15 2008 +0100
+
+    update NEWS
+    
+    i do it now because the current version can convert darcs.darcs
+    correctly with the following speedup:
+    
+    old:
+    progress [2008-11-25 16:17:00] 100/6548 patches
+    progress [2008-11-25 16:30:09] 200/6548 patches
+    
+    new:
+    progress [2008-11-27 02:49:42] 100/6548 patches
+    progress [2008-11-27 02:49:50] 200/6548 patches
+
+commit cea44aebcdd085a8f82d2e60b5f7314658475ef2
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Thu Nov 27 14:51:00 2008 +0100
+
+    do renames first, we need it now that we simplify nodes
+
+commit c750b743bfe2c19d202b8541cccdf9663eeb0de9
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Thu Nov 27 14:36:26 2008 +0100
+
+    d2x: allow specifying extra d-f-e options
+    
+    this is especially useful for --encoding
+
+commit e0cc72018f4173641696dcd770df290f404047e5
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Thu Nov 27 04:13:23 2008 +0100
+
+    add a new simplify_nodes() function
+    
+    the initial list is based on the one from tailor (need to contact Lele
+    if he wants to be in a copyright, or thanks list, etc)
+
+commit 31e504d0bddd15d96820d738d92335ba60112e68
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Thu Nov 27 03:32:40 2008 +0100
+
+    extract inline_path()
+
+commit 272fe69e7a3e03ee690fbc5ac8e66059abb89e57
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Thu Nov 27 02:58:57 2008 +0100
+
+    do not try to rename non-existing files
+
+commit eb6f1d0cf0220a0c8366aa704c6bd80e1f2edb73
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Thu Nov 27 02:45:46 2008 +0100
+
+    fix testimport-git-twoway.sh
+
+commit ef3ec0364451edd93bb36980d39acc7408fd5249
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Thu Nov 27 02:26:40 2008 +0100
+
+    cleanup
+
+commit 60750fb0b19e1a6665efbf2364e4488540396444
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Thu Nov 27 02:23:38 2008 +0100
+
+    initial darcs2 inventory parser
+
+commit 71d5caf89d2574b7df2db635bb90fc257be55653
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Thu Nov 27 02:13:40 2008 +0100
+
+    rename directpatch to oldfashionedpatch
+
+commit a32e32600dfdc805845674eb00bc91386ec11d24
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Thu Nov 27 01:52:27 2008 +0100
+
+    document status (outside versions)
+
+commit d56dbe765914db6bb95a72d3305465e4d76dd076
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Thu Nov 27 01:07:50 2008 +0100
+
+    bench: default to all repos
+
+commit 8048d2e24a4ae06cfb646f2176d470df46671b43
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Thu Nov 27 01:07:04 2008 +0100
+
+    fix typo when doing an continuing an incremental export and the workdir is removed
+
+commit a2ecca825a125c214ac2aaa86eb08761ef69c09d
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Thu Nov 27 00:59:00 2008 +0100
+
+    be a bit more verbose in the log file so we can see what takes so much time
+
+commit 68d108fe7ebb9e1ee192033d2217a8cf262281e4
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Thu Nov 27 00:32:35 2008 +0100
+
+    bench: leave everything there if the conversion is corrupted so it's possible to debug it
+
+commit 527bfa38a3bcfcc9d145bc5f2221e69f60d8a5d9
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Wed Nov 26 19:55:55 2008 +0100
+
+    add verify support to the bench script
+
+commit d12d76004245ac69c61991f3cc90d9ad306598b5
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Thu Nov 27 00:29:59 2008 +0100
+
+    don't do the re-add dance in every commit for unchanged files
+
+commit 788c63c9b6d356b84ec1ea7a0123dc68c13d048e
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Thu Nov 27 00:18:25 2008 +0100
+
+    add HACKING
+
+commit 0f136d9acd4cd2350a3f64a6a06304892d90cf17
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Tue Nov 25 16:02:11 2008 +0100
+
+    bench: be a bit more verbose
+
+commit 112adcd29ccc4db1fb8d4c4aa79bc5b721c27175
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Tue Nov 25 15:07:48 2008 +0100
+
+    add a benchmark script
+
+commit bbfccb741756e30e21651f6642f62e3005d0f148
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Mon Nov 24 00:14:19 2008 +0100
+
+    todo update
+
+commit 0f09043591134d48082f2b3b69f48c7e238a765b
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Mon Nov 24 00:12:54 2008 +0100
+
+    TAG 0.6
+
+commit d249d5fb00a2351b05b5c71cf56d2de7e55dc2ae
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Mon Nov 24 00:11:42 2008 +0100
+
+    updates for 0.6
+
+commit 7f1008c8aee180f1f97de1c7217def38812a5c33
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Mon Nov 24 00:11:11 2008 +0100
+
+    add dist and release targets
+
+commit ab9e37a81565197bf98cae43c960b520c136abca
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Mon Nov 24 00:02:51 2008 +0100
+
+    fix git-darcs manpage example
+
+commit 5314c5dcfa2d927fb7d11f3a9792546d822ffe4f
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Mon Nov 24 00:01:26 2008 +0100
+
+    doc update
+
+commit d7e2c996111beac16eef7b9dc6bfd90066e939de
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Sun Nov 23 23:55:59 2008 +0100
+
+    the right fix for the dash problem
+
+commit b0d1bf11fc9c332e7588c4d43f67d5a4d9fb2143
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Sun Nov 23 23:54:24 2008 +0100
+
+    update todo
+
+commit 1763eff48eff74e265100b58d0a65351e8ac96ed
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Sun Nov 23 23:54:16 2008 +0100
+
+    i want dashes in manpage names
+
+commit 4c0c1da04c1a7a2450d7c94b0020f067a6dfa86b
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Sun Nov 23 23:44:45 2008 +0100
+
+    add install target
+
+commit e123907c7ab4075353fefd13e5f42b7ecccae549
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Sun Nov 23 23:35:34 2008 +0100
+
+    fix asciidoc man warnings
+
+commit bb7e2e76eac3bf6dacacb6cc914bfdeff76e50c3
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Sun Nov 23 23:30:55 2008 +0100
+
+    add makefile rules for html/man docs
+
+commit a5d4d289900f42fd3698e8ee7e83d07224e6bda8
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Sun Nov 23 23:26:27 2008 +0100
+
+    add x2d manpage
+
+commit a63301c699644438df84be6e90d307b7ad09d3e5
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Sun Nov 23 23:23:38 2008 +0100
+
+    add g-d manpage
+
+commit 457beb525822ed1004b2f7b3c0f844b952bcefe4
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Sun Nov 23 23:11:24 2008 +0100
+
+    add d-f-i manpage
+
+commit f9060e7e9f0c8a73deef410cfe4599f317b00a28
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Sun Nov 23 23:08:16 2008 +0100
+
+    add d-f-e manpage
+
+commit 6b9df7c3b43fa514388f47dab5710589c9eb9569
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Sun Nov 23 22:55:51 2008 +0100
+
+    add d2x manpage
+
+commit ad385667c1c6f2f586a36aa5f2d3077e67646f9a
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Sun Nov 23 22:05:42 2008 +0100
+
+    update doc
+
+commit 652fc1f093b260bf03c6519aee1c327e861d16c9
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Sun Nov 23 22:00:12 2008 +0100
+
+    g-d: add pull subcommand
+
+commit a2cc43ce817c5aa89729a68ee04aad028a7f89b9
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Sun Nov 23 21:50:47 2008 +0100
+
+    update NEWS
+
+commit 1437ef08973d5e9b8cb8a69f6eae496415b38a56
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Sun Nov 23 21:50:06 2008 +0100
+
+    document git-darcs in the README
+
+commit 3897136cd5cc3cf85481ad939b4f59359e23b889
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Sun Nov 23 21:46:29 2008 +0100
+
+    g-d: be more explicit to the user when nothing fetched
+
+commit 448ab196871278c0796c20c53864d2e7c991ab6d
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Sun Nov 23 21:36:12 2008 +0100
+
+    g-d: make push behave like git-push
+    
+    so that we see our changes in the remote ref without a fetch as well
+
+commit 5b4690eed0b746b57b4dd339704ec04921d2b49a
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Sun Nov 23 21:30:15 2008 +0100
+
+    add git-darcs test
+
+commit c0f182a13c0e3c08ee5ef6fd6408a747907ccfad
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Sun Nov 23 21:03:33 2008 +0100
+
+    git-darcs: initial import
+
+commit 312932eae92d1a728c3cc573f6a85c8c1071b4e4
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Sun Nov 23 20:09:40 2008 +0100
+
+    add d-f-e --git-branch
+
+commit 12b667ac8d8bba40102461a0fa61ae0a36d3e158
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Sun Nov 23 04:14:01 2008 +0100
+
+    document how to install the hg plugin
+
+commit 68aa769291e0c3bd72472a0211b6095c20ff942e
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Sun Nov 23 04:09:22 2008 +0100
+
+    bzr fastimport seem not to work here fine for two-way sync
+    
+    and actually i'm lazy to see why ita fails, so leave this out for now
+
+commit 3c6f52d81cd57f6013f090a2649585c96e2a26a2
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Sun Nov 23 03:57:17 2008 +0100
+
+    update doc
+
+commit 5141e3c5b473d96fc7e9a0f66869b94cb7638e8e
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Sun Nov 23 03:56:25 2008 +0100
+
+    syntax fix
+
+commit 5b081ee8dcd6693eeb2a6ddd2658a1c76601df61
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Sun Nov 23 03:54:11 2008 +0100
+
+    update todo
+
+commit 25ce8bd198fc4554267d30e74e739d7af979b53f
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Sun Nov 23 03:53:21 2008 +0100
+
+    add hg x2d test
+
+commit 8620f739cecfc161e82ceb2358a12592d4c0ad9a
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Sun Nov 23 03:50:58 2008 +0100
+
+    add bzr x2d testcase
+
+commit 1d346f19ea831d682815e1f7b0e88947fb63ab54
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Sun Nov 23 03:42:25 2008 +0100
+
+    initial import of x2d
+
+commit 7e361c127794c4e156300bb9677a6d877a3c9f28
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Sun Nov 23 03:03:59 2008 +0100
+
+    d2x: typo
+
+commit 2d5b3c9d0aafa70c9bc1116d8e77861bfa57037b
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Sun Nov 23 03:02:24 2008 +0100
+
+    avoid hardcoded python path
+
+commit fcded86e33db118e2a9491419c24424250a44971
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Sun Nov 23 02:55:44 2008 +0100
+
+    one more todo
+
+commit 1c3a01618ea8512fd9d5e454c22ddc1856f64c28
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Sun Nov 23 02:47:25 2008 +0100
+
+    update TODO
+
+commit 1dba50912f6277ea1c1016ac180146a9475279d5
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Sun Nov 23 02:45:13 2008 +0100
+
+    update doc
+
+commit 64a1a1ad019e773d74d350d699e821b768cd5b9a
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Sun Nov 23 02:35:44 2008 +0100
+
+    t: testimport-git-twoway.sh: do a bit more stress-test
+
+commit bb9f51e3a6b4dd374df0440ce8a3d3ebff480d99
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Sun Nov 23 02:25:46 2008 +0100
+
+    initial two-way converter test
+
+commit 1937e21dbbc5e76a25a30aa5adb726a9dd5684b3
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Sun Nov 23 02:16:01 2008 +0100
+
+    d-f-e: handle the case when we just continue an incremental conversion
+    
+    but the working repo is no longer available
+
+commit 8468bd4a360c9efb2490df5907782e8b13d38daa
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Sun Nov 23 02:06:33 2008 +0100
+
+    d-f-i: add --logfile
+
+commit 837ddf6aaf94092839ac944f798466e06197bb2a
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Sun Nov 23 01:33:08 2008 +0100
+
+    update todo
+
+commit 6cc114b7e6b25ebf1413212ae6db6ba1201463e9
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Sun Nov 23 01:30:19 2008 +0100
+
+    add hg->darcs test
+
+commit 57ed57a0ba0e4fc85893b156ae44675017b24eee
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Sun Nov 23 00:45:24 2008 +0100
+
+    reset ignore: but only in case it's a "from" line
+
+commit 684b0dd23b2248a1cc6d6ed1f18cc2e72fbb21ed
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Sun Nov 23 00:43:08 2008 +0100
+
+    add bzr->darcs test
+
+commit b49c4a173c8def06cdaa3237ab2babfccbeb0bdd
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Sun Nov 23 00:41:30 2008 +0100
+
+    d-f-i: ignore the from line after the reset one as well
+
+commit 258511e6569b7ae1e4af4a4f4f482331847ffa7c
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Sun Nov 23 00:35:54 2008 +0100
+
+    t: implement create_bzr() and diff_importbzr()
+
+commit f018a92870302441de2fcd1aa03447003c369a32
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Sat Nov 22 23:37:43 2008 +0100
+
+    update TODO
+
+commit f36ff153cbb8108fae564e81e7d9403ff0b4b6c3
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Sat Nov 22 23:33:40 2008 +0100
+
+    d-f-i: avoid adding re-adding already added files in incremental mode
+
+commit 55984013d02a4b1f0dda8daf4e072551b77af3ca
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Sat Nov 22 23:20:00 2008 +0100
+
+    add incremental import test
+
+commit 69e9641b5ab36b295510b3eb6b52fccfb7d32cf5
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Sat Nov 22 23:19:32 2008 +0100
+
+    add --import-marks option
+
+commit ff491b95343785c62afd4426bb1d4cf83af35046
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Sat Nov 22 22:00:33 2008 +0100
+
+    add --export-marks option
+
+commit 670fa0554b81426975835bfddf4687733aeb1cca
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Sat Nov 22 20:43:51 2008 +0100
+
+    todo update
+    
+    it seems most of the stuff missing from the fast-import spec is now
+    there \o/
+
+commit 8e58da2bd24eeecf55d27cee7b394b193f2bd401
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Sat Nov 22 20:37:26 2008 +0100
+
+    implement filecopy
+
+commit 56f0c50558a7f759e288ac917d8be6da369b7a35
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Sat Nov 22 20:30:35 2008 +0100
+
+    add rename command
+
+commit 0d1ee4a3048d7eba960fb866003d05b5f23e6955
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Sat Nov 22 20:28:30 2008 +0100
+
+    reorder to match spec order
+
+commit b2d439824c6a0a5361d501d413b8d95f4989ef7d
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Sat Nov 22 20:19:32 2008 +0100
+
+    implement deleteall command
+
+commit 8c6d385cdb8705d4894c7405578f59cbda9cdcdd
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Sat Nov 22 19:10:18 2008 +0100
+
+    don't try to unlink non-existing files
+
+commit ed654b3c70165abae914b078fe2f8036208f89b0
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Sat Nov 22 19:02:24 2008 +0100
+
+    silently ignore checkout
+
+commit 7ece5c4e9bf51ae1d1ec1f874132636fcb76047b
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Sat Nov 22 18:51:50 2008 +0100
+
+    fix 'Format of STDIN stream' doc url
+
+commit 423470c5128cc9892ca9a2c33fdfe7998ea40648
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Sat Nov 22 18:44:00 2008 +0100
+
+    add new test: d-f-e | d-f-i
+
+commit 23fd126b08bc56140fdd3b109703fd08f0aebc3c
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Sat Nov 22 16:37:39 2008 +0100
+
+    d-f-e: fix exporting multiline commit messages
+
+commit 3d1c951386f1e8866e81f760142a6500160b8013
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Sat Nov 22 16:36:15 2008 +0100
+
+    initial tag support
+
+commit 49b013ee5a82e0821dde0728dfe3f490a417eaec
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Sat Nov 22 16:27:14 2008 +0100
+
+    d-f-e: don't export ignore-this lines
+
+commit a62cda9e00790144dd038601881917e85da573af
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Sat Nov 22 16:22:53 2008 +0100
+
+    d-f-e: don't use global vars without a good reason
+
+commit 890f0bace45609a9028417be629f4a2f391e49ec
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Sat Nov 22 16:18:52 2008 +0100
+
+    d-f-i: support inline data
+
+commit ad2551cbe6da40f69886ad559cdd2bf01a534a4d
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Sat Nov 22 15:59:42 2008 +0100
+
+    do not darcs add files which would be removed in this commit
+    
+    so the trick is that the f-i format allows you to do:
+    
+    commit
+    D file
+    M file
+    
+    but in this case we do not need a darcs add
+
+commit 4b0bf888a92b8a370e2b6fd76cd6fad4084edb58
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Sat Nov 22 15:35:10 2008 +0100
+
+    skip_optional_lf(): use self.read() as well
+
+commit 462ef6ab0d2a31558b8f3d10813594cba28f5dcf
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Sat Nov 22 15:28:54 2008 +0100
+
+    redesign handle_commit()
+
+commit 00d719151f9e93e167a1b3ba04285e50437d46d3
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Sat Nov 22 14:37:07 2008 +0100
+
+    add handle_data()
+
+commit cfd5d1a24a62f96126c7b1e8e8ba5bcc24a3b939
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Sat Nov 22 14:31:18 2008 +0100
+
+    new handle_mark()
+
+commit d21c9296684efa040a85b2d275b940ca17ccaf80
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Sat Nov 22 14:19:30 2008 +0100
+
+    make the last read line readable everywhere
+
+commit 90fa58d035aa33755b055617058f341bd8f122e7
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Sat Nov 22 14:09:52 2008 +0100
+
+    make d-f-i a bit more oo-ish
+
+commit cdaa02956586095a947920a5a4dde6befda2269a
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Sat Nov 22 04:33:50 2008 +0100
+
+    implement skip_optional_lf()
+
+commit 3603272cf42b4f01dceddc79a01060612cdf3081
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Sat Nov 22 04:00:32 2008 +0100
+
+    handle committer in case author is not given
+
+commit a9507d3dbe254cfabee042b5a0f6c6bbbe9f93ff
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Sat Nov 22 03:16:19 2008 +0100
+
+    t: remove unneded tmp branch after merging in create_git()
+
+commit 8c1a678682e2e7d82a03aa9872afee018e2ee74e
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Sat Nov 22 02:36:29 2008 +0100
+
+    handle progress command
+
+commit 3b69bbd4978995d95cfe5b2891342a747b6a8f49
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Sat Nov 22 02:33:42 2008 +0100
+
+    add a TODO
+
+commit 9760fe6370b379a8d5340998288fac46b11bd473
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Sat Nov 22 02:26:52 2008 +0100
+
+    darcs-fast-import: initial import
+    
+    - the initial test passes, but of course more work is needed
+
+commit a39276ebc58318256ffcf57895cae8d12eb6d996
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Sat Nov 22 00:38:44 2008 +0100
+
+    t: add create_git() to lib.sh
+
+commit 101241eb67061962bd9dd26c14654538eeb54b07
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Sat Nov 22 00:16:56 2008 +0100
+
+    TAG 0.5
+
+commit 79e827fd45f3803ac8b4f38d00b820240f8215b4
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Sat Nov 22 00:16:42 2008 +0100
+
+    update for 0.5
+
+commit 3d8acc3e18ce00720eb6a292c3fabd7ccfd96ea7
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Mon Nov 17 20:19:36 2008 +0100
+
+    bump darcs requirement to a snapshot
+    
+    ok, so finally i managed to reproduce that weird "corrupted patches"
+    bug, which turns to be already fixed in unstable:
+    http://thread.gmane.org/gmane.comp.version-control.darcs.user/15837
+
+commit b98989593b605ca07758a1637eba7007fbb29d56
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Mon Nov 17 11:26:09 2008 +0100
+
+    fix an error triggered by converting the haddock darcs repo
+
+commit 8cd8f217bf2386e31a46f91d7495d2a5bb2eb625
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Sun Nov 16 03:11:24 2008 +0100
+
+    fix an error triggered by converting the tailor darcs repo
+
+commit e769233fc85efdbcdaa85e307a84d8e6832392f7
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Sun Nov 16 02:59:02 2008 +0100
+
+    update NEWS
+
+commit aaf28a03d90ad493ed8d98564dadf13da8275961
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Sun Nov 16 02:56:11 2008 +0100
+
+    make the logfile path configurable
+
+commit 64f0b50703b08415e14d015823419d79d7907943
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Sun Nov 16 02:55:13 2008 +0100
+
+    d2x: cleanup
+
+commit 65cf023151f5dd94625f51b0eec8068b35b0fc87
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Sun Nov 16 02:40:45 2008 +0100
+
+    dfe: speed up incremental conversions a lot
+    
+    the idea is to get only the interesting part of the xml
+
+commit d4235721c81a22e48f6ff84dc24f09081c990c4d
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Sun Nov 16 01:40:27 2008 +0100
+
+    d2x: beautify output when no changes to pull
+
+commit bce0bea1dd7862a0f0ac2e4297404bb031f139fa
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Sun Nov 16 01:40:03 2008 +0100
+
+    dfe: append a newline to the marks file
+
+commit 1b3fa1645fc9a8834abac36f83e5e1582c3ce8a0
+Author: Matthias Andree <matthias.andree@gmx.de>
+Date:   Sat Nov 15 23:15:22 2008 +0100
+
+    Detail Matthias Andree's contributions.
+
+commit ff601e2db9b6474e3bc87cd94d1a0214a4e3de5f
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Sat Nov 15 23:49:48 2008 +0100
+
+    document d2x
+
+commit 4b198054aed750d77bbb30e430354a8169a9e114
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Sat Nov 15 23:47:45 2008 +0100
+
+    d2x: add one-time hg support
+
+commit 14f7788a53686a9d4f8606c790c0cdac458f1d83
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Sat Nov 15 23:43:29 2008 +0100
+
+    add d2x
+    
+    because i got tired typing those --import-marks/--export-marks manually
+    all the time. :)
+
+commit 252f216dec84bac8609bb7e1d6fe46a27201f87b
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Sat Nov 15 23:35:31 2008 +0100
+
+    t: PATH tweaks
+
+commit d5765555bc11fbdf3a251a9e4c2481fe8b7af510
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Sat Nov 15 23:30:35 2008 +0100
+
+    fix the case when we update an incremental import again
+
+commit e8bb7653e313b17a81ad0e19fd1cb0e183358f66
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Sat Nov 15 18:29:43 2008 +0100
+
+    add "additional resources" to the readme
+
+commit 0026376a7b37ca1228c8066e25c64b37c3f404a2
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Sat Nov 15 18:27:35 2008 +0100
+
+    darcs-fast-export.py -> darcs-fast-export
+
+commit 4b8857627472fcc9de1069a14e41df6bfe130857
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Sat Nov 15 18:21:51 2008 +0100
+
+    update NEWS
+
+commit 921192dc0029e5d95b8da1782dc9c51cc7d86c1d
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Sat Nov 15 18:18:07 2008 +0100
+
+    make --working work with relative paths
+
+commit ca47d01d77456bef8075077a5f42a3e0935ffcf1
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Sat Nov 15 18:16:14 2008 +0100
+
+    add test for --working
+
+commit 22c69ec627ee84194024fbe5b3303520f325722f
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Sat Nov 15 18:10:10 2008 +0100
+
+    make workdir location configurable
+
+commit 48c3b151bb7faf2a28c5fbcad462b9860a98c50b
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Sat Nov 15 18:03:18 2008 +0100
+
+    update NEWS
+
+commit 0eb2e47e8cbe27a2cf03d32d9f7309d07aeba94b
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Sat Nov 15 18:01:41 2008 +0100
+
+    fix darcs2 incremental support
+
+commit 20f642c1765d9be015e73d36409b214bab7106b6
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Sat Nov 15 17:59:05 2008 +0100
+
+    add darcs1 -> git incremental testcase
+
+commit 584397f6b5cf4282c018294bb451e4965cf268e9
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Sat Nov 15 17:58:45 2008 +0100
+
+    add support for darcs1 incremental conversion
+
+commit c2f1474a27fd0e1a143d611d495c4698c2bae449
+Author: Matthias Andree <matthias.andree@gmx.de>
+Date:   Thu Nov 13 17:06:55 2008 +0100
+
+    Add author mapping feature similar to git svn fetch --authors-file.
+    
+    [ mv: fixed a NameError ]
+
+commit 1f907552780ad88aa01acc531b786ad30c3d0682
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Fri Nov 14 14:16:04 2008 +0100
+
+    fix for the case when tags have a second "Ignore-this:" line
+
+commit 264480e5ab39d10a3452a04c36eb82392b200f1e
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Fri Nov 14 01:37:08 2008 +0100
+
+    handle old darcs patches where the format in the xml differs
+
+commit 0ddb30b74fea3ce66bf0646803ccd1b9313b337c
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Thu Nov 13 23:57:08 2008 +0100
+
+    README: avoid 'I', 'me' and 'my', I'm no longer the only contributor
+    
+    also other cosmetics (spaces->tabs, etc)
+
+commit 45ee3f29c760d35013851e7a1e5d92cbe06a89bc
+Author: Matthias Andree <matthias.andree@gmx.de>
+Date:   Thu Nov 13 17:06:54 2008 +0100
+
+    Add support for hashed repository formats.
+
+commit 7ea3682bf1e33f592e30110cc3e5f194dff40f51
+Author: Matthias Andree <matthias.andree@gmx.de>
+Date:   Thu Nov 13 17:06:53 2008 +0100
+
+    Revamp README.
+
+commit 765051c6c8eba4afcd456904d6f4af56ab1fd08c
+Author: Matthias Andree <matthias.andree@gmx.de>
+Date:   Thu Nov 13 05:55:10 2008 +0100
+
+    Mangle whitespace in tags to please git fast-import.
+    
+    - strip surrounding whitespace from tag,
+    - replace embedded blanks by underscores,
+    in order to unchoke the import of tags that might contain trailing blanks.
+    
+    Problem observed after CVS->darcs import with a 2004 darcs version.
+
+commit 14741632b42eec013f312cb88a4123e532401833
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Thu Nov 13 16:07:30 2008 +0100
+
+    update NEWS
+
+commit 128394b7ac2c9b6ddc082722f2c5b1e8593adad1
+Author: Matthias Andree <matthias.andree@gmx.de>
+Date:   Thu Nov 13 04:06:53 2008 +0100
+
+    Flush log regularly. (This isn't sync, so it's cheap enough.)
+
+commit b8c4f569c314904cdd85a1799a2abc2f847cf3ec
+Author: Matthias Andree <matthias.andree@gmx.de>
+Date:   Thu Nov 13 04:06:51 2008 +0100
+
+    Tweak progress output a bit.
+
+commit fb4fac45cfbd31912476a1ba9b6acf2a95afd0c0
+Author: Matthias Andree <matthias.andree@gmx.de>
+Date:   Thu Nov 13 04:06:50 2008 +0100
+
+    Let user specify --encoding on command line.
+    
+    chardet is awfully slow, thus specifying the --encoding speeds things up.
+
+commit 2223d8ca5e9c0bad5561de26398e6b2e3e4aa024
+Author: Matthias Andree <matthias.andree@gmx.de>
+Date:   Thu Nov 13 04:06:49 2008 +0100
+
+    Change to original wd before writing export marks.
+
+commit a26544f56ccdb45aece10bb8d1e3f1b89cd842a9
+Author: Matthias Andree <matthias.andree@gmx.de>
+Date:   Thu Nov 13 04:06:48 2008 +0100
+
+    Only read _darcs/format if present.
+    
+    _darcs/format may not exist on older darcs-1.0 repositories,
+    check before use and assume darcs-1 if missing.
+
+commit 400f279b4971da9ab48c3e7c6acedf516bfc9703
+Author: Matthias Andree <matthias.andree@gmx.de>
+Date:   Thu Nov 13 04:06:47 2008 +0100
+
+    clean up close() calls
+
+commit 1189f93ee45bd13b0898e4785c319ac0a98d2053
+Author: Matthias Andree <matthias.andree@gmx.de>
+Date:   Thu Nov 13 04:06:45 2008 +0100
+
+    Revamp option parser, using optparse.
+    
+    We'll now use Python's optparse library to parse the option, which gives
+    us several advantages:
+    
+     - options can appear in any order (important for future extension)
+     - the code is more concise
+     - we get --help output for free
+
+commit dc8c7501dc8d2242052ce22cf21657ada364a797
+Author: Matthias Andree <matthias.andree@gmx.de>
+Date:   Thu Nov 13 04:06:44 2008 +0100
+
+    Use proper ^[ sequence for escaping \x1b.
+
+commit da46fa37468626d2d0501ce607e6a5db6f148c2a
+Author: Matthias Andree <matthias.andree@gmx.de>
+Date:   Thu Nov 13 04:06:43 2008 +0100
+
+    Don't guess darcs-2 repo format, but look at _darcs/format.
+
+commit 871da9f0db1522ac5da24ac21e5f43e117bcdfd7
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Thu Nov 13 00:02:36 2008 +0100
+
+    update bzr version
+
+commit 83eee961464041ee108051400d11985a072e975a
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Wed Nov 12 22:25:45 2008 +0100
+
+    t: add diff_hg()
+
+commit 0dbcf672a60e0909fabda6232bd8d5e833c27510
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Wed Nov 12 22:23:50 2008 +0100
+
+    t: use diff_bzr in test-bzr.sh
+
+commit 7fc7c2a5623981ebf31c3d88b4c83748c764ba21
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Wed Nov 12 22:22:16 2008 +0100
+
+    add incremental darcs2->bzr test
+
+commit d99fcb1429fed8281916fbe59918c0ccf4a50ec4
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Tue Nov 11 02:52:16 2008 +0100
+
+    be nice to people who helped and who wrote backends
+
+commit 0ad2f611e8253884261fa39d41f9c1dc293aeff5
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Tue Nov 11 02:45:47 2008 +0100
+
+    readme: try to be a bit less subjective
+
+commit bbc60f8d038fab460295f98274004d0e70020a6b
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Tue Nov 11 02:31:17 2008 +0100
+
+    TAG 0.4
+
+commit e3defd2dcdb3022f17b2f0f16e3f3796edf1f6ef
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Tue Nov 11 02:31:12 2008 +0100
+
+    update news for 0.4
+
+commit fd19076ec8eb9b37fee72c33815c4e146884e3b7
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Tue Nov 11 02:30:31 2008 +0100
+
+    add a new test to demonstrate incremental conversion
+
+commit cf2be569691cdb41b76c7ebdc2c3c802b0af0bda
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Tue Nov 11 02:27:35 2008 +0100
+
+    incremental conversion is now working
+
+commit f5b60e7d27a593f0d650075c58981a20f3d7baf3
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Tue Nov 11 02:14:41 2008 +0100
+
+    t: lib: add upd_file_darcs()
+
+commit 0aa5015c50ba93011a5f32296e8fb70c510015a7
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Tue Nov 11 02:11:59 2008 +0100
+
+    t: typos
+
+commit 5387a60971af750dd7392a9fc9b55f7dbbe33d0f
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Tue Nov 11 02:06:56 2008 +0100
+
+    t: add die() to lib.sh
+
+commit 4f8c1eda1f8f675d0e8896f57ba0ddff6cb82405
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Tue Nov 11 02:06:01 2008 +0100
+
+    t: diff_git(): cleanup before clone
+
+commit f5396d5194ef0309195a19c660311aefdbe9f3cb
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Tue Nov 11 02:04:48 2008 +0100
+
+    t: extract diff_git()
+
+commit 1b9f8c7fbde6f18757d6bb9a46d1ee07e9c064b2
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Tue Nov 11 02:02:36 2008 +0100
+
+    t: cleanup
+
+commit 661c159ac1cf3c02d06c854e83f2796adc100730
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Tue Nov 11 02:01:47 2008 +0100
+
+    t: typo fixes
+
+commit 67bd8f80b7a7f76117ca5971016b911234f75e1b
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Tue Nov 11 02:00:23 2008 +0100
+
+    implement import_marks as well
+
+commit 6175cbc7cda46362c499d1805b150f29156aa7d9
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Tue Nov 11 01:49:09 2008 +0100
+
+    implement --export-marks
+
+commit 61941abf053a177b2a0b88d60e76e61a4bbd0685
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Tue Nov 11 01:38:24 2008 +0100
+
+    eye candy
+
+commit 7c7372d641b68674591aeaea295b1a67cf8e2c55
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Tue Nov 11 01:31:22 2008 +0100
+
+    port test2-git
+
+commit 2e9154122ea95c7adc6bbd4359a9e74f9fa80dde
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Tue Nov 11 01:30:23 2008 +0100
+
+    remove static test2
+
+commit 387fcd729540bc00b38fcce6f3cc3dea52ae0fe0
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Tue Nov 11 01:29:58 2008 +0100
+
+    port test-hg.sh
+
+commit 2a3b72a179a2b062e50af11cf872290c114db00b
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Tue Nov 11 01:29:16 2008 +0100
+
+    port test-bzr to the test lib
+
+commit a66a50fa8576b81c1358a087692c50b595be9d08
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Tue Nov 11 01:10:21 2008 +0100
+
+    generate the darcs1 repo automatically
+
+commit 98ffcb1a494ee703d4d4d5771a5c87f78ce9bbd3
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Tue Nov 11 00:20:47 2008 +0100
+
+    start marks from 1
+
+commit 7a89d5e82e3bc9f51485486d85ba2ffe896bb675
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Tue Nov 11 00:09:44 2008 +0100
+
+    add a NEWS file
+
+commit 35172e88ec5d2255c2243b8e0af3b69bad137185
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Tue Nov 11 00:01:42 2008 +0100
+
+    update readme
+
+commit 4e817a1670681f984daef58154a892e1b809ab1b
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Mon Nov 10 23:53:04 2008 +0100
+
+    add darcs2->git test
+
+commit c1aece85fde0acf6c416438655d486ff888c9751
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Mon Nov 10 23:47:44 2008 +0100
+
+    remove files which should be untracked
+
+commit 7a4cb8c760d13552fe7e7cb697db344d70f6f9c7
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Mon Nov 10 23:46:57 2008 +0100
+
+    darcs2: log the output
+
+commit a259485fd997189bf7a5685a254cf5b6f9f0b0b1
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Mon Nov 10 23:43:32 2008 +0100
+
+    initial darcs2 support
+
+commit ca84276a12555d3219b47b46bc9215aedefb7dff
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Mon Nov 10 23:34:52 2008 +0100
+
+    add test2 - a darcs2 repo (doesn't work yet)
+
+commit 994e1064dd83356ac6ff8c44b1fa72b135e36f47
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Sat Nov 8 01:06:41 2008 +0100
+
+    Revert "avoid hardcoding internal darcs backup paths"
+    
+    This reverts commit b940f2c79d69466ea11427e0742655122763a74e, because it
+    breaks darcs2.
+
+commit 8c0d124f781411f51aecd72a85d06d7bd0383892
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Mon Nov 10 23:23:12 2008 +0100
+
+    import of t/Makefile
+
+commit cef63ea1f5151ab2adb285d5c0e047fe05b9a1f4
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Mon Nov 10 23:18:01 2008 +0100
+
+    test-bzr: avoid pristine fix exit code
+
+commit 80adb31392d455e6ac50bc92d5b215377a392dda
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Mon Nov 10 23:17:35 2008 +0100
+
+    test-hg: avoid pristine fix exit code
+
+commit df45f9257e0d71049636445ab1f5ebdb78b70e48
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Mon Nov 10 23:17:01 2008 +0100
+
+    test-git: avoid pristine, fix exit code
+
+commit afcfadd2df9510d110902d43bcf0b235a79c14ab
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Mon Nov 10 23:13:55 2008 +0100
+
+    avoid an unnecessary chdir()
+
+commit 1fbbbb12e3b8cbc52ed0750d3dcc9ce342ad9dfa
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Sat Nov 8 01:23:50 2008 +0100
+
+    README: add a simple todo
+
+commit 4da7df07e9daa9079ea32aa8c29438c8ef0329de
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Wed Oct 29 00:13:30 2008 +0100
+
+    reorder darcs/git version infos
+
+commit b940f2c79d69466ea11427e0742655122763a74e
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Wed Oct 29 00:09:37 2008 +0100
+
+    avoid hardcoding internal darcs backup paths
+
+commit 9289fba61711925dd4a39f146c37264a96b36d67
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Wed Oct 29 00:06:44 2008 +0100
+
+    test-bzr: avoid unnecessary bzr branch
+
+commit ddfa931a4028297f98f070c9495d3a6eb863c7b8
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Wed Oct 29 00:02:25 2008 +0100
+
+    update hg infos
+
+commit 9a740f6cdc138d1875e56e3ac566f2c13ef54c28
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Tue Oct 28 23:34:18 2008 +0100
+
+    t: add 2 new test patches
+
+commit 5151c912985f189cb65a0b861e2465d08e8ec08c
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Tue Oct 28 23:30:41 2008 +0100
+
+    add bzr versions
+
+commit 798a98bf9a22e28b84ca49d031479f42b1d3956a
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Tue Oct 28 23:04:06 2008 +0100
+
+    avoid deleteall
+    
+    - upstream bzr fast-import and hg fastimport does not support it yet
+
+commit d182cb9c2951c3969f1fefccd43f76178b2e0dae
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Tue Oct 28 21:59:37 2008 +0100
+
+    mention hg fastimport
+
+commit 7497bf878d09d1e050d236881b7c49559f0bc74b
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Tue Oct 28 21:58:14 2008 +0100
+
+    add some note about hg fastimport
+
+commit c8c8e8b7b4a69040ddf8bd01213b7fdc60367e72
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Tue Oct 28 21:40:21 2008 +0100
+
+    add test scripts and a very simple repo
+
+commit f82076c00a9b4f9589d9f130d54e10fbd95fe192
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Mon Oct 20 19:23:12 2008 +0200
+
+    mention how to darcs2bzr
+
+commit d0643f0c2be670572505b3176e975482afa879d2
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Mon Oct 20 18:52:45 2008 +0200
+
+    handle empty author, bzr fast-export does not like it
+
+commit 5eae0020661f20dbae90028e3d3ba9262b3ba24a
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Mon Oct 20 09:28:09 2008 +0200
+
+    link undarcs
+
+commit 1f0ef52c0ad4942232bb19c37313eaf3a398c40a
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Sun Oct 19 15:49:37 2008 +0200
+
+    log darcs apply output
+
+commit fd56de4cc9784213f466205c1c32b2a3eedc8e21
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Sun Oct 19 15:43:45 2008 +0200
+
+    use os.path.join()
+
+commit 09b076fc3c7d7208b5c9886edae814d583f52605
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Sun Oct 19 15:04:05 2008 +0200
+
+    add download section
+
+commit 9f1f72e3fb33e36ab964fd828ea3f7dc02082ad2
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Sun Oct 19 15:02:00 2008 +0200
+
+    add goals section
+
+commit 3e183c1dd00b53b3130d10032d69e8473baa26a0
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Sun Oct 19 14:52:15 2008 +0200
+
+    typo in README
+
+commit ac5c0a0c6f5337ad9702e9b97c6087e49c461107
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Sun Oct 19 14:51:00 2008 +0200
+
+    add a Makefile
+
+commit 1fbf8738b605d98d66c397db20cde8fe3a476710
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Sun Oct 19 14:47:40 2008 +0200
+
+    add a readme
+
+commit 8d07e165318a881388f6a40da162d12f16d7f5b3
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Sun Oct 19 13:55:58 2008 +0200
+
+    add license header
+
+commit 8bb80b70f864622d9e920f63058194eb115dee13
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Sun Oct 19 13:52:52 2008 +0200
+
+    remove fixme about the +x bit
+
+commit e3ba9adc8f4de8e350192d29d4af21cf6eed4c24
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Sun Oct 19 04:23:41 2008 +0200
+
+    prefix progress with timestamp
+
+commit dc37d81e44acb9d60d331dff4e801d2ef11e295c
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Sun Oct 19 04:18:06 2008 +0200
+
+    escape a bad char. more to come?
+
+commit 4c6ecd81a61fdd4eaa3753abc0afdc19525906e5
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Sun Oct 19 04:06:22 2008 +0200
+
+    more progress messages
+
+commit d15756b2b95a3e0e7a694bc5d79174b0b9929737
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Sun Oct 19 03:49:24 2008 +0200
+
+    add progress command
+
+commit 9f6c44dd6887dc3eb591d42914ec6d4075578ac1
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Sun Oct 19 03:30:31 2008 +0200
+
+    add chardet support
+
+commit 09280356c985d32e79ff2d24f04f070cd7d48088
+Author: Miklos Vajna <vmiklos@frugalware.org>
+Date:   Sun Oct 19 03:12:54 2008 +0200
+
+    initial version

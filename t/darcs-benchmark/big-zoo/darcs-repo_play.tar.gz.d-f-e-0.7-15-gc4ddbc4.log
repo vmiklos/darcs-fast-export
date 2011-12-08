@@ -1,0 +1,116 @@
+Initialized empty Git repository in /home/vmiklos/git/darcs-fast-export/t/darcs-benchmark/big-zoo/_playground/sandbox.git/
+progress [2008-12-22 20:52:52] getting list of patches
+progress [2008-12-22 20:52:57] encoding is not utf8, guessing charset
+progress [2008-12-22 20:54:11] detected encoding is ISO-8859-2
+progress [2008-12-22 20:54:12] parsing the inventory
+progress [2008-12-22 20:54:13] starting export, repo has 6548 patches
+progress [2008-12-22 20:54:24] 100/6548 patches
+progress [2008-12-22 20:54:37] 200/6548 patches
+progress [2008-12-22 20:54:53] 300/6548 patches
+progress [2008-12-22 20:55:09] 400/6548 patches
+progress [2008-12-22 20:55:29] 500/6548 patches
+progress [2008-12-22 20:55:49] 600/6548 patches
+progress [2008-12-22 20:56:11] 700/6548 patches
+progress [2008-12-22 20:56:35] 800/6548 patches
+progress [2008-12-22 20:57:00] 900/6548 patches
+progress [2008-12-22 20:57:26] 1000/6548 patches
+progress [2008-12-22 20:57:57] 1100/6548 patches
+progress [2008-12-22 20:58:26] 1200/6548 patches
+progress [2008-12-22 20:58:58] 1300/6548 patches
+progress [2008-12-22 20:59:31] 1400/6548 patches
+progress [2008-12-22 21:00:06] 1500/6548 patches
+progress [2008-12-22 21:00:43] 1600/6548 patches
+Writing pristine 98/109
+progress [2008-12-22 21:01:21] 1700/6548 patches
+progress [2008-12-22 21:02:01] 1800/6548 patches
+progress [2008-12-22 21:02:42] 1900/6548 patches
+progress [2008-12-22 21:03:25] 2000/6548 patches
+progress [2008-12-22 21:04:08] 2100/6548 patches
+progress [2008-12-22 21:04:54] 2200/6548 patches
+progress [2008-12-22 21:05:40] 2300/6548 patches
+progress [2008-12-22 21:06:29] 2400/6548 patches
+progress [2008-12-22 21:07:19] 2500/6548 patches
+progress [2008-12-22 21:08:10] 2600/6548 patches
+Reading pristine 10/75
+progress [2008-12-22 21:09:05] 2700/6548 patches
+progress [2008-12-22 21:10:01] 2800/6548 patches
+progress [2008-12-22 21:10:57] 2900/6548 patches
+progress [2008-12-22 21:11:55] 3000/6548 patches
+progress [2008-12-22 21:12:55] 3100/6548 patches
+progress [2008-12-22 21:13:57] 3200/6548 patches
+Synchronizing pristine 0/147
+progress [2008-12-22 21:15:04] 3300/6548 patches
+progress [2008-12-22 21:16:13] 3400/6548 patches
+progress [2008-12-22 21:17:22] 3500/6548 patches
+progress [2008-12-22 21:18:30] 3600/6548 patches
+progress [2008-12-22 21:19:40] 3700/6548 patches
+Writing pristine 188/230
+progress [2008-12-22 21:20:53] 3800/6548 patches
+Reading pristine 21/149
+progress [2008-12-22 21:22:09] 3900/6548 patches
+progress [2008-12-22 21:23:23] 4000/6548 patches
+progress [2008-12-22 21:24:39] 4100/6548 patches
+progress [2008-12-22 21:25:59] 4200/6548 patches
+progress [2008-12-22 21:27:22] 4300/6548 patches
+progress [2008-12-22 21:28:47] 4400/6548 patches
+progress [2008-12-22 21:30:19] 4500/6548 patches
+progress [2008-12-22 21:31:53] 4600/6548 patches
+progress [2008-12-22 21:33:27] 4700/6548 patches
+progress [2008-12-22 21:35:02] 4800/6548 patches
+progress [2008-12-22 21:36:43] 4900/6548 patches
+progress [2008-12-22 21:38:25] 5000/6548 patches
+progress [2008-12-22 21:40:08] 5100/6548 patches
+progress [2008-12-22 21:41:57] 5200/6548 patches
+progress [2008-12-22 21:43:46] 5300/6548 patches
+progress [2008-12-22 21:45:37] 5400/6548 patches
+Writing inventory 5/39
+progress [2008-12-22 21:47:33] 5500/6548 patches
+progress [2008-12-22 21:49:26] 5600/6548 patches
+progress [2008-12-22 21:51:23] 5700/6548 patches
+progress [2008-12-22 21:53:22] 5800/6548 patches
+progress [2008-12-22 21:55:20] 5900/6548 patches
+progress [2008-12-22 21:57:22] 6000/6548 patches
+Writing inventory 25/46
+progress [2008-12-22 21:59:27] 6100/6548 patches
+progress [2008-12-22 22:01:32] 6200/6548 patches
+progress [2008-12-22 22:03:40] 6300/6548 patches
+progress [2008-12-22 22:05:50] 6400/6548 patches
+progress [2008-12-22 22:07:57] 6500/6548 patches
+Writing inventory 14/50
+progress [2008-12-22 22:09:01] writing export marks
+progress [2008-12-22 22:09:01] finished
+git-fast-import statistics:
+---------------------------------------------------------------------
+Alloc'd objects:      35000
+Total objects:        32413 (   1779473 duplicates                  )
+      blobs  :        13840 (   1658134 duplicates       9942 deltas)
+      trees  :        11974 (    121339 duplicates       5844 deltas)
+      commits:         6548 (         0 duplicates          0 deltas)
+      tags   :           51 (         0 duplicates          0 deltas)
+Total branches:           1 (         1 loads     )
+      marks:        1048576 (      6548 unique    )
+      atoms:            736
+Memory total:          3192 KiB
+       pools:          2098 KiB
+     objects:          1093 KiB
+---------------------------------------------------------------------
+pack_report: getpagesize()            =       4096
+pack_report: core.packedGitWindowSize =   33554432
+pack_report: core.packedGitLimit      =  268435456
+pack_report: pack_used_ctr            =     156936
+pack_report: pack_mmap_calls          =      13545
+pack_report: pack_open_windows        =          3 /          4
+pack_report: pack_mapped              =   75141576 /   86138246
+---------------------------------------------------------------------
+
+
+real	76m9.806s
+user	56m5.874s
+sys	13m48.136s
+          Type: darcs
+        Format: hashed, darcs-2
+      Pristine: HashedPristine
+  predist Pref: autoconf && ./configure --disable-optimize && ${MAKE-make} predist
+     test Pref: make disttest
+   Num Patches: 6548
+ok, the result is correct
