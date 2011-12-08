@@ -18,7 +18,7 @@ It exhibits the following _features:_
 
 Fast::
 	darcs-fast-export provides a fast darcs backend for fast-import.
-	See link:t/bench-results/[here] for exact details.
+	See link:t/bench-results/bench-results.png[here] for exact details.
 
 Correct::
 	darcs-fast-export produces correct results in any extreme cases.
